@@ -1,0 +1,4 @@
+PS2 register definitions
+
+This repository contains headers with the Playstation 2's hardware registers
+laid out in terms of linux-style GENMASK/BIT macros.
