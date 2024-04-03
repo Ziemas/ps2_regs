@@ -1,5 +1,5 @@
-#ifndef GS_H_
-#define GS_H_
+#ifndef GS_REGS_H_
+#define GS_REGS_H_
 
 #include "util.h"
 
@@ -510,4 +510,4 @@
         (FIELD_PREP(GS_FOGCOL_FCR, (fcr)) | FIELD_PREP(GS_FOGCOL_FCG, (fcg)) | \
             FIELD_PREP(GS_FOGCOL_FCB, (fcb)))
 
-#endif // GS_H_
+#endif // GS_REGS_H_

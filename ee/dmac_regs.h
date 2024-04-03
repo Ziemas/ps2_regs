@@ -1,5 +1,5 @@
-#ifndef DMAC_H_
-#define DMAC_H_
+#ifndef DMAC_REGS_H_
+#define DMAC_REGS_H_
 
 #include "util.h"
 
@@ -76,4 +76,4 @@
 #define DMA_R_ENABLER    (0x1000f520)
 #define DMA_ENABLER_CPND BIT(16)
 
-#endif // DMAC_H_
+#endif // DMAC_REGS_H_
