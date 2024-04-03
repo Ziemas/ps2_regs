@@ -14,13 +14,13 @@
 #define DMA_BASE_SPR_FROM 0x1000D000
 #define DMA_BASE_SPR_TO   0x1000D400
 
-#define DMA_CHCR 0x0
-#define DMA_MADR 0x10
-#define DMA_QWC  0x20
-#define DMA_TADR 0x30
-#define DMA_ASR0 0x40
-#define DMA_ASR1 0x50
-#define DMA_SADR 0x80
+#define DMA_R_CHCR 0x0
+#define DMA_R_MADR 0x10
+#define DMA_R_QWC  0x20
+#define DMA_R_TADR 0x30
+#define DMA_R_ASR0 0x40
+#define DMA_R_ASR1 0x50
+#define DMA_R_SADR 0x80
 
 #define DMA_CHCR_DIR          BIT(0)
 #define DMA_CHCR_DIR_TO_MEM   0
