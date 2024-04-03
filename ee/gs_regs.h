@@ -65,7 +65,8 @@
 #define GS_ALPHA_ZERO 2
 #define GS_ALPHA_AS   0
 #define GS_ALPHA_AD   1
-#define GS_ALPHA_FIX  2
+// FIX Renamed because of GS_ALPHA_FIX macro down below, have to decide which one to rename
+#define GS_ALPHA_AFIX 2
 
 /* Priviledged registers */
 #define GS_R_PMODE    0x12000000
@@ -138,6 +139,7 @@
 #define GS_R_SIGNAL     0x60
 #define GS_R_FINISH     0x61
 #define GS_R_LABEL      0x62
+#define GS_R_NOP        0x7f
 
 /* PRIM Fields */
 #define GS_PRIM_FIX  BIT(10)
@@ -282,6 +284,24 @@
 #define GS_ALPHA_B   GENMASK(3, 2)
 #define GS_ALPHA_A   GENMASK(1, 0)
 
+/* DIMX Fields */
+#define GS_DIMX_DM33 GENMASK(62, 60)
+#define GS_DIMX_DM32 GENMASK(58, 56)
+#define GS_DIMX_DM31 GENMASK(54, 52)
+#define GS_DIMX_DM30 GENMASK(50, 48)
+#define GS_DIMX_DM23 GENMASK(46, 44)
+#define GS_DIMX_DM22 GENMASK(42, 40)
+#define GS_DIMX_DM21 GENMASK(38, 36)
+#define GS_DIMX_DM20 GENMASK(34, 32)
+#define GS_DIMX_DM13 GENMASK(30, 28)
+#define GS_DIMX_DM12 GENMASK(26, 24)
+#define GS_DIMX_DM11 GENMASK(22, 20)
+#define GS_DIMX_DM10 GENMASK(18, 16)
+#define GS_DIMX_DM03 GENMASK(14, 12)
+#define GS_DIMX_DM02 GENMASK(10, 8)
+#define GS_DIMX_DM01 GENMASK(6, 4)
+#define GS_DIMX_DM00 GENMASK(2, 0)
+
 /* DTHE Fields */
 #define GS_DTHE_DTHE BIT(0)
 
@@ -360,11 +380,11 @@
 #define GS_SMODE2_INT  BIT(0)
 
 /* DISPFB Fields */
-#define GS_DISPFB2_DBY GENMASK(53, 42)
-#define GS_DISPFB2_DBX GENMASK(42, 32)
-#define GS_DISPFB2_PSM GENMASK(19, 15)
-#define GS_DISPFB2_FBW GENMASK(14, 9)
-#define GS_DISPFB2_FBP GENMASK(8, 0)
+#define GS_DISPFB_DBY GENMASK(53, 42)
+#define GS_DISPFB_DBX GENMASK(42, 32)
+#define GS_DISPFB_PSM GENMASK(19, 15)
+#define GS_DISPFB_FBW GENMASK(14, 9)
+#define GS_DISPFB_FBP GENMASK(8, 0)
 
 /* DISPLAY Fields */
 #define GS_DISPLAY_DH   GENMASK(54, 44)
@@ -509,5 +529,104 @@
 #define GS_SET_FOGCOL(fcr, fcg, fcb)                                           \
         (FIELD_PREP(GS_FOGCOL_FCR, (fcr)) | FIELD_PREP(GS_FOGCOL_FCG, (fcg)) | \
             FIELD_PREP(GS_FOGCOL_FCB, (fcb)))
+
+#define GS_SET_SCISSOR(scax0, scax1, scay0, scay1)                                       \
+        (FIELD_PREP(GS_SCISSOR_SCAX0, (scax0)) | FIELD_PREP(GS_SCISSOR_SCAX1, (scax1)) | \
+            FIELD_PREP(GS_SCISSOR_SCAY0, (scay0)) | FIELD_PREP(GS_SCISSOR_SCAY1, (scay1)))
+
+#define GS_SET_ALPHA(a, b, c, d, fix)                                                              \
+        (FIELD_PREP(GS_ALPHA_A, (a)) | FIELD_PREP(GS_ALPHA_B, (b)) | FIELD_PREP(GS_ALPHA_C, (c)) | \
+            FIELD_PREP(GS_ALPHA_D, (d)) | FIELD_PREP(GS_ALPHA_FIX, (fix)))
+
+#define GS_SET_DIMX(dm00, dm01, dm02, dm03, dm10, dm11, dm12, dm13, dm20, dm21, dm22, dm23, dm30, \
+    dm31, dm32, dm33)                                                                             \
+        (FIELD_PREP(GS_DIMX_DM00, (dm00)) | FIELD_PREP(GS_DIMX_DM01, (dm01)) |                    \
+            FIELD_PREP(GS_DIMX_DM02, (dm02)) | FIELD_PREP(GS_DIMX_DM03, (dm03)) |                 \
+            FIELD_PREP(GS_DIMX_DM10, (dm10)) | FIELD_PREP(GS_DIMX_DM11, (dm11)) |                 \
+            FIELD_PREP(GS_DIMX_DM12, (dm12)) | FIELD_PREP(GS_DIMX_DM13, (dm13)) |                 \
+            FIELD_PREP(GS_DIMX_DM20, (dm20)) | FIELD_PREP(GS_DIMX_DM21, (dm21)) |                 \
+            FIELD_PREP(GS_DIMX_DM22, (dm22)) | FIELD_PREP(GS_DIMX_DM23, (dm23)) |                 \
+            FIELD_PREP(GS_DIMX_DM30, (dm30)) | FIELD_PREP(GS_DIMX_DM31, (dm31)) |                 \
+            FIELD_PREP(GS_DIMX_DM32, (dm32)) | FIELD_PREP(GS_DIMX_DM33, (dm33)))
+
+#define GS_SET_DTHE(dthe) (FIELD_PREP(GS_DTHE_DTHE, (dthe)))
+
+#define GS_SET_COLCLAMP(clamp) (FIELD_PREP(GS_COLCLAMP_CLAMP, (clamp)))
+
+#define GS_SET_TEST(ate, atst, aref, afail, date, datm, zte, ztst)                  \
+        (FIELD_PREP(GS_TEST_ATE, (ate)) | FIELD_PREP(GS_TEST_ATST, (atst)) |        \
+            FIELD_PREP(GS_TEST_AREF, (aref)) | FIELD_PREP(GS_TEST_AFAIL, (afail)) | \
+            FIELD_PREP(GS_TEST_DATE, (date)) | FIELD_PREP(GS_TEST_DATM, (datm)) |   \
+            FIELD_PREP(GS_TEST_ZTE, (zte)) | FIELD_PREP(GS_TEST_ZTST, (ztst)))
+
+#define GS_SET_PABE(pabe) (FIELD_PREP(GS_PABE_PABE, (pabe)))
+
+#define GS_SET_FBA(fba) (FIELD_PREP(GS_FBA_FBA, (fba)))
+
+#define GS_SET_FRAME(fbp, fbw, psm, fbmask)                                  \
+        (FIELD_PREP(GS_FRAME_FBP, (fbp)) | FIELD_PREP(GS_FRAME_FBW, (fbw)) | \
+            FIELD_PREP(GS_FRAME_PSM, (psm)) | FIELD_PREP(GS_FRAME_FBMASK, (fbmask)))
+
+#define GS_SET_ZBUF(zbp, psm, zmsk)                                        \
+        (FIELD_PREP(GS_ZBUF_ZBP, (zbp)) | FIELD_PREP(GS_ZBUF_PSM, (psm)) | \
+            FIELD_PREP(GS_ZBUF_ZMSK, (zmsk)))
+
+#define GS_SET_BITBLTBUF(sbp, sbw, spsm, dbp, dbw, dpsm)                                  \
+        (FIELD_PREP(GS_BITBLTBUF_SBP, (sbp)) | FIELD_PREP(GS_BITBLTBUF_SBW, (sbw)) |      \
+            FIELD_PREP(GS_BITBLTBUF_SPSM, (spsm)) | FIELD_PREP(GS_BITBLTBUF_DBP, (dbp)) | \
+            FIELD_PREP(GS_BITBLTBUF_DBW, (dbw)) | FIELD_PREP(GS_BITBLTBUF_DPSM, (dpsm)))
+
+#define GS_SET_TRXPOS(ssax, ssay, dsax, dsay, dir)                                    \
+        (FIELD_PREP(GS_TRXPOS_SSAX, (ssax)) | FIELD_PREP(GS_TRXPOS_SSAY, (ssay)) |    \
+            FIELD_PREP(GS_TRXPOS_DSAX, (dsax)) | FIELD_PREP(GS_TRXPOS_DSAY, (dsay)) | \
+            FIELD_PREP(GS_TRXPOS_DIR, (dir)))
+
+#define GS_SET_TRXREG(rrw, rrh) \
+        (FIELD_PREP(GS_TRXREG_RRW, (rrw)) | FIELD_PREP(GS_TRXREG_RRH, (rrh)))
+
+#define GS_SET_TRXDIR(xdir) (FIELD_PREP(GS_TRXREG_XDIR, (xdir)))
+
+#define GS_SET_SIGNAL(id, idmsk) \
+        (FIELD_PREP(GS_SIGNAL_ID, (id)) | FIELD_PREP(GS_SIGNAL_IDMSK, (idmsk)))
+
+#define GS_SET_LABEL(id, idmsk) \
+        (FIELD_PREP(GS_LABEL_ID, (id)) | FIELD_PREP(GS_LABEL_IDMSK, (idmsk)))
+
+#define GS_SET_PMODE(en1, en2, crtmd, mmod, amod, slbg, alp)                          \
+        (FIELD_PREP(GS_PMODE_EN1, (en1)) | FIELD_PREP(GS_PMODE_EN2, (en2)) |          \
+            FIELD_PREP(GS_PMODE_CRTMD, (crtmd)) | FIELD_PREP(GS_PMODE_MMOD, (mmod)) | \
+            FIELD_PREP(GS_PMODE_AMOD, (amod)) | FIELD_PREP(GS_PMODE_SLBG, (slbg)) |   \
+            FIELD_PREP(GS_PMODE_ALP, (alp)))
+
+#define GS_SET_SMODE2(intr, ffmd, dpms)                                            \
+        (FIELD_PREP(GS_SMODE2_INTR, (intr)) | FIELD_PREP(GS_SMODE2_FFMD, (ffmd)) | \
+            FIELD_PREP(GS_SMODE2_DPMS, (dpms)))
+
+#define GS_SET_DISPFB(fbp, fbw, psm, dbx, dby)                                    \
+        (FIELD_PREP(GS_DISPFB_FBP, (fbp)) | FIELD_PREP(GS_DISPFB_FBW, (fbw)) |    \
+            FIELD_PREP(GS_DISPFB_PSM, (psm)) | FIELD_PREP(GS_DISPFB_DBX, (dbx)) | \
+            FIELD_PREP(GS_DISPFB_DBY, (dby)))
+
+#define GS_SET_DISPLAY(dx, dy, magh, magv, dw, dh)                                      \
+        (FIELD_PREP(GS_DISPLAY_DX, (dx)) | FIELD_PREP(GS_DISPLAY_DY, (dy)) |            \
+            FIELD_PREP(GS_DISPLAY_MAGH, (magh)) | FIELD_PREP(GS_DISPLAY_MAGV, (magv)) | \
+            FIELD_PREP(GS_DISPLAY_DW, (dw)) | FIELD_PREP(GS_DISPLAY_DH, (dh)))
+
+#define GS_SET_EXTBUF(exbp, exbw, fbin, wffmd, emoda, emodc, wdx, wdy)                    \
+        (FIELD_PREP(GS_EXTBUF_EXBP, (exbp)) | FIELD_PREP(GS_EXTBUF_EXBW, (exbw)) |        \
+            FIELD_PREP(GS_EXTBUF_FBIN, (fbin)) | FIELD_PREP(GS_EXTBUF_WFFMD, (wffmd)) |   \
+            FIELD_PREP(GS_EXTBUF_EMODA, (emoda)) | FIELD_PREP(GS_EXTBUF_EMODC, (emodc)) | \
+            FIELD_PREP(GS_EXTBUF_WDX, (wdx)) | FIELD_PREP(GS_EXTBUF_WDY, (wdy)))
+
+#define GS_SET_EXTDATA(sx, sy, smph, smpv, ww, wh)                                      \
+        (FIELD_PREP(GS_EXTDATA_SX, (sx)) | FIELD_PREP(GS_EXTDATA_SY, (sy)) |            \
+            FIELD_PREP(GS_EXTDATA_SMPH, (smph)) | FIELD_PREP(GS_EXTDATA_SMPV, (smpv)) | \
+            FIELD_PREP(GS_EXTDATA_WW, (ww)) | FIELD_PREP(GS_EXTDATA_WH, (wh)))
+
+#define GS_SET_EXTWRITE(write) (FIELD_PREP(GS_EXTWRITE_WRITE, (write)))
+
+#define GS_SET_BGCOLOR(r, g, b)                                          \
+        (FIELD_PREP(GS_BGCOLOR_R, (r)) | FIELD_PREP(GS_BGCOLOR_G, (g)) | \
+            FIELD_PREP(GS_BGCOLOR_B, (b)))
 
 #endif // GS_REGS_H_
