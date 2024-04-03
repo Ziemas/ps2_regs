@@ -13,6 +13,7 @@
 #define GIF_R_CNT   0x10003080
 #define GIF_R_P3CNT 0x10003090
 #define GIF_R_P3TAG 0x100030A0
+#define GIF_R_FIFO  0x10006000
 
 /* GIF_R_CTRL Fields */
 #define GIF_CTRL_PSE BIT(3)
