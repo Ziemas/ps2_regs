@@ -22,44 +22,44 @@
 #define DMA_R_ASR1 0x50
 #define DMA_R_SADR 0x80
 
-#define DMA_CHCR_DIR          BIT(0)
-#define DMA_CHCR_DIR_TO_MEM   0
-#define DMA_CHCR_DIR_FROM_MEM 1
+#define DMA_CHCR_TAG          GENMASK(31, 16)
+#define DMA_CHCR_STR          BIT(8)
+#define DMA_CHCR_TIE          BIT(7)
+#define DMA_CHCR_TTE          BIT(6)
+#define DMA_CHCR_ASP          GENMASK(5, 4)
 #define DMA_CHCR_MOD          GENMASK(3, 2)
 #define DMA_CHCR_MOD_NORM     0
 #define DMA_CHCR_MOD_CHAIN    1
 #define DMA_CHCR_MOD_INTRL    2
-#define DMA_CHCR_ASP          GENMASK(5, 4)
-#define DMA_CHCR_TTE          BIT(6)
-#define DMA_CHCR_TIE          BIT(7)
-#define DMA_CHCR_STR          BIT(8)
-#define DMA_CHCR_TAG          GENMASK(31, 16)
+#define DMA_CHCR_DIR          BIT(0)
+#define DMA_CHCR_DIR_TO_MEM   0
+#define DMA_CHCR_DIR_FROM_MEM 1
 
 #define DMA_R_CTRL    (0x1000E000)
-#define DMA_CTRL_DMAE BIT(0)
-#define DMA_CTRL_RELE BIT(1)
-#define DMA_CTRL_MFD  GENMASK(3, 2)
-#define DMA_CTRL_STS  GENMASK(5, 4)
-#define DMA_CTRL_STD  GENMASK(7, 6)
 #define DMA_CTRL_RCYC GENMASK(10, 8)
+#define DMA_CTRL_STD  GENMASK(7, 6)
+#define DMA_CTRL_STS  GENMASK(5, 4)
+#define DMA_CTRL_MFD  GENMASK(3, 2)
+#define DMA_CTRL_RELE BIT(1)
+#define DMA_CTRL_DMAE BIT(0)
 
 #define DMA_R_STAT    (0x1000E010)
-#define DMA_STAT_CIS  GENMASK(9, 0)
-#define DMA_STAT_SIS  BIT(13)
-#define DMA_STAT_MEIS BIT(14)
-#define DMA_STAT_BEIS BIT(15)
-#define DMA_STAT_CIM  GENMASK(25, 16)
-#define DMA_STAT_SIM  BIT(29)
 #define DMA_STAT_MEIM BIT(30)
+#define DMA_STAT_SIM  BIT(29)
+#define DMA_STAT_CIM  GENMASK(25, 16)
+#define DMA_STAT_BEIS BIT(15)
+#define DMA_STAT_MEIS BIT(14)
+#define DMA_STAT_SIS  BIT(13)
+#define DMA_STAT_CIS  GENMASK(9, 0)
 
 #define DMA_R_PCR   (0x1000e020)
-#define DMA_PCR_CPC GENMASK(9, 0)
-#define DMA_PCR_CDE GENMASK(25, 16)
 #define DMA_PCR_PCE BIT(31)
+#define DMA_PCR_CDE GENMASK(25, 16)
+#define DMA_PCR_CPC GENMASK(9, 0)
 
 #define DMA_R_SQWC    (0x1000e030)
-#define DMA_SQWC_SQWC GENMASK(7, 0)
 #define DMA_SQWC_TQWC GENMASK(23, 16)
+#define DMA_SQWC_SQWC GENMASK(7, 0)
 
 #define DMA_R_RBOR    (0x1000e050)
 #define DMA_RBOR_ADDR GENMASK(30, 0)
